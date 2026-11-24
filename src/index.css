@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+}
+
+.font-arabic {
+  font-family: 'Cairo', system-ui, sans-serif;
+}
+
+.font-english {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.font-mono-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Document Language Typography & Direction */
+.doc-en {
+  font-family: var(--cv-font-body, 'Plus Jakarta Sans', system-ui, sans-serif);
+  direction: ltr;
+  text-align: left;
+}
+
+.doc-ar {
+  font-family: var(--cv-font-body, 'Cairo', system-ui, sans-serif);
+  direction: rtl;
+  text-align: right;
+}
+
+.cv-sheet-content {
+  font-family: var(--cv-font-body, inherit);
+}
+
+.cv-sheet-content h1,
+.cv-sheet-content h2,
+.cv-sheet-content h3 {
+  font-family: var(--cv-font-heading, var(--cv-font-body, inherit));
+}
+
+/* Subtle Custom Scrollbar */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* A4 Paper Surface on Screen (ISO 216: 210mm × 297mm) */
+.a4-paper {
+  position: relative;
+  width: 100%;
+  max-width: 210mm;
+  min-height: 297mm;
+  background: #ffffff;
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.1), 0 4px 12px -4px rgba(15, 23, 42, 0.06);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Seamless full-height sidebar background across A4 page height on desktop & print */
+@media (min-width: 640px), print {
+  .a4-paper.a4-split-ltr {
+    background: linear-gradient(
+      to right,
+      var(--cv-sidebar-bg, #1e293b) 0%,
+      var(--cv-sidebar-bg, #1e293b) 33.333333%,
+      #ffffff 33.333333%,
+      #ffffff 100%
+    );
+  }
+
+  .a4-paper.a4-split-rtl {
+    background: linear-gradient(
+      to left,
+      var(--cv-sidebar-bg, #1e293b) 0%,
+      var(--cv-sidebar-bg, #1e293b) 33.333333%,
+      #ffffff 33.333333%,
+      #ffffff 100%
+    );
+  }
+
+  .a4-paper.a4-fit-single {
+    height: 297mm;
+    max-height: 297mm;
+    overflow: hidden;
+  }
+}
+
+.avoid-break {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Crisp Exact A4 Portrait (210mm × 297mm) PDF Export Rules */
+@media print {
+  @page {
+    size: 210mm 297mm;
+    margin: 0;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #root,
+  .print-root,
+  .print-main,
+  #print-wrapper {
+    display: block !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .a4-paper {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .a4-paper.a4-fit-single {
+    height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  .a4-paper.a4-split-ltr {
+    background: linear-gradient(
+      to right,
+      var(--cv-sidebar-bg, #1e293b) 0%,
+      var(--cv-sidebar-bg, #1e293b) 33.333333%,
+      #ffffff 33.333333%,
+      #ffffff 100%
+    ) !important;
+  }
+
+  .a4-paper.a4-split-rtl {
+    background: linear-gradient(
+      to left,
+      var(--cv-sidebar-bg, #1e293b) 0%,
+      var(--cv-sidebar-bg, #1e293b) 33.333333%,
+      #ffffff 33.333333%,
+      #ffffff 100%
+    ) !important;
+  }
+
+  .print-grid-12 {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  }
+
+  .print-sidebar {
+    background-color: var(--cv-sidebar-bg, #1e293b) !important;
+    grid-column: span 4 / span 4 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .print-main-col {
+    grid-column: span 8 / span 8 !important;
+    background-color: #ffffff !important;
+  }
+
+  .print-header-dark {
+    background-color: var(--cv-primary, #1e293b) !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .print-tint-bg {
+    background-color: var(--cv-tint, #f1f5f9) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .a4-paper img {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

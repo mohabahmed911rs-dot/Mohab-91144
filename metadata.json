@@ -1,0 +1,6 @@
+{
+  "name": "CV Studio | منشئ السيرة الذاتية الأكاديمية والمهنية",
+  "description": "منشئ سيرة ذاتية أكاديمية ومهنية (CV و Resume و Cover Letter) بمعاينة A4 فورية ودعم اللغتين العربية والإنجليزية وتصدير PDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

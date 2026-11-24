@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منشئ السيرة الذاتية الأكاديمية والمهنية | CV Studio</title>
+
+  <!-- Google Fonts: Cairo (Arabic) & Inter (English) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            arabic: ['Cairo', 'sans-serif'],
+            english: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Base UI Typography */
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+
+    /* Document Language Typography */
+    .doc-en {
+      font-family: 'Inter', sans-serif;
+      direction: ltr;
+      text-align: left;
+    }
+    .doc-ar {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* Custom Scrollbar for Form */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* A4 Sheet Styling on Screen */
+    .a4-paper {
+      width: 100%;
+      max-width: 210mm;
+      min-height: 297mm;
+      background: #ffffff;
+      box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    /* Avoid awkward page splits inside entries */
+    .avoid-break {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* Print Media Rules for Crisp A4 PDF Export */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      html, body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 210mm !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      #print-wrapper {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+      }
+
+      .a4-paper {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        width: 210mm !important;
+        max-width: 210mm !important;
+        min-height: 297mm !important;
+        margin: 0 !important;
+      }
+
+      .print-sidebar {
+        background-color: #1e293b !important;
+        color: #f8fafc !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .print-header-dark {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ==================== TOP NAVIGATION BAR ==================== -->
+  <header class="no-print sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
+          <i data-lucide="file-text" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">منشئ السيرة الذاتية الاحترافي</h1>
+          <p class="text-xs text-slate-500">مطابق للمواصفات الأكاديمية والمهنية (CV • Resume • Cover Letter)</p>
+        </div>
+      </div>
+
+      <!-- Document Mode Switcher -->
+      <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+        <button id="tab-cv" onclick="setDocType('cv')" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all">
+          CV الأكاديمي
+        </button>
+        <button id="tab-resume" onclick="setDocType('resume')" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all">
+          Resume (صفحة)
+        </button>
+        <button id="tab-cover" onclick="setDocType('cover_letter')" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all">
+          Cover Letter
+        </button>
+      </div>
+
+      <!-- Action Controls -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Document Language Toggle -->
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200" title="لغة واتجاه المستند المُنشأ">
+          <button id="lang-en" onclick="setDocLang('en')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all">EN</button>
+          <button id="lang-ar" onclick="setDocLang('ar')" class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all">عربي</button>
+        </div>
+
+        <button onclick="loadSampleData()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 transition-colors">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>تعبئة بيانات تجريبية</span>
+        </button>
+
+        <button onclick="openClearModal()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-rose-600 hover:bg-rose-50 border border-slate-200 transition-colors">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">مسح</span>
+        </button>
+
+        <button onclick="printDocument()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-sm transition-all">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          <span>طباعة / حفظ PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN WORKSPACE ==================== -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+    <!-- ==================== FORM PANEL (RIGHT IN RTL) ==================== -->
+    <section class="no-print lg:col-span-5 flex flex-col gap-4">
+      <!-- Intro Helper Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex items-start gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+        </div>
+        <div class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <strong class="text-slate-900 block mb-0.5">املأ الحقول وسيتم تحديث المستند فوراً</strong>
+          يمكنك إدخال بياناتك بالإنجليزية أو العربية، ثم التبديل بين <span class="font-bold text-slate-800">CV الشامل</span> و<span class="font-bold text-slate-800">Resume</span> و<span class="font-bold text-slate-800">Cover Letter</span> من الشريط العلوي.
+        </div>
+      </div>
+
+      <!-- Collapsible Form Sections Container -->
+      <div id="form-container" class="flex flex-col gap-3">
+
+        <!-- 1. Personal & Contact -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-personal')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">1</span>
+              <span class="font-bold text-slate-800 text-sm">البيانات الشخصية والتواصل</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-personal" class="w-4 h-4 text-slate-500 transition-transform rotate-180"></i>
+          </button>
+          <div id="sec-personal" class="p-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1">الاسم الكامل</label>
+              <input type="text" id="input-fullName" oninput="updateField('personal','fullName',this.value)" placeholder="مثال: Dr. Sarah Ahmed / سارة أحمد" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1">المسمى الوظيفي / الأكاديمي</label>
+              <input type="text" id="input-title" oninput="updateField('personal','title',this.value)" placeholder="مثال: Food Technology Researcher & Quality Specialist" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">رقم الهاتف</label>
+              <input type="text" id="input-phone" oninput="updateField('personal','phone',this.value)" placeholder="+20 123 456 7890" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">البريد الإلكتروني</label>
+              <input type="email" id="input-email" oninput="updateField('personal','email',this.value)" placeholder="name@university.edu.eg" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">الموقع (المدينة، الدولة)</label>
+              <input type="text" id="input-location" oninput="updateField('personal','location',this.value)" placeholder="Cairo, Egypt" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">LinkedIn / ORCID / Google Scholar</label>
+              <input type="text" id="input-website" oninput="updateField('personal','website',this.value)" placeholder="linkedin.com/in/username" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1">النبذة الشخصية والأكاديمية (Profile)</label>
+              <textarea id="input-profile" rows="3" oninput="updateField('personal','profile',this.value)" placeholder="ملخص مختصر وقوي يوضح خبراتك وأهدافك البحثية أو المهنية..." class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Academic Education -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-education')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">2</span>
+              <span class="font-bold text-slate-800 text-sm">التعليم الأكاديمي (Education)</span>
+              <span id="count-education" class="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold">0</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-education" class="w-4 h-4 text-slate-500 transition-transform"></i>
+          </button>
+          <div id="sec-education" class="hidden p-4 border-t border-slate-100 space-y-3">
+            <div id="list-education" class="space-y-3"></div>
+            <button type="button" onclick="addItem('education')" class="w-full py-2 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>إضافة مؤهل أكاديمي</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Experience -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-experience')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">3</span>
+              <span class="font-bold text-slate-800 text-sm">الخبرات العملية والإنجازات (Experience)</span>
+              <span id="count-experience" class="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold">0</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-experience" class="w-4 h-4 text-slate-500 transition-transform"></i>
+          </button>
+          <div id="sec-experience" class="hidden p-4 border-t border-slate-100 space-y-3">
+            <p class="text-xs text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+              نصيحة: اكتب كل إنجاز في سطر منفصل، واستخدم أرقاماً ونسباً مئوية (مثال: 25% زيادة في الكفاءة) كما هو موضح في الدليل.
+            </p>
+            <div id="list-experience" class="space-y-3"></div>
+            <button type="button" onclick="addItem('experience')" class="w-full py-2 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>إضافة خبرة عملية</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Publications & Research Projects -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-research')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">4</span>
+              <span class="font-bold text-slate-800 text-sm">المنشورات والأبحاث العلمية (CV)</span>
+              <span id="count-research-total" class="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold">0</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-research" class="w-4 h-4 text-slate-500 transition-transform"></i>
+          </button>
+          <div id="sec-research" class="hidden p-4 border-t border-slate-100 space-y-5">
+            <!-- Publications -->
+            <div class="space-y-2.5">
+              <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                <i data-lucide="book-open" class="w-3.5 h-3.5 text-sky-600"></i>
+                المنشورات العلمية (Extensive Publications)
+              </h4>
+              <div id="list-publications" class="space-y-3"></div>
+              <button type="button" onclick="addItem('publications')" class="w-full py-2 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>إضافة بحث منشور</span>
+              </button>
+            </div>
+            <hr class="border-slate-100" />
+            <!-- Research Projects -->
+            <div class="space-y-2.5">
+              <h4 class="text-xs font-extrabold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                <i data-lucide="flask-conical" class="w-3.5 h-3.5 text-sky-600"></i>
+                المشاريع البحثية (Research Projects)
+              </h4>
+              <div id="list-research" class="space-y-3"></div>
+              <button type="button" onclick="addItem('research')" class="w-full py-2 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>إضافة مشروع بحثي</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Conferences, Grants & Teaching -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-conferences')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">5</span>
+              <span class="font-bold text-slate-800 text-sm">المؤتمرات، المنح والخبرة التدريسية (CV)</span>
+              <span id="count-conferences" class="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold">0</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-conferences" class="w-4 h-4 text-slate-500 transition-transform"></i>
+          </button>
+          <div id="sec-conferences" class="hidden p-4 border-t border-slate-100 space-y-3">
+            <div id="list-conferences" class="space-y-3"></div>
+            <button type="button" onclick="addItem('conferences')" class="w-full py-2 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>إضافة مؤتمر / منحة / خبرة تدريسية</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 6. Awards & Certifications -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-awards')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">6</span>
+              <span class="font-bold text-slate-800 text-sm">الجوائز والشهادات والتدريبات</span>
+              <span id="count-awards-total" class="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold">0</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-awards" class="w-4 h-4 text-slate-500 transition-transform"></i>
+          </button>
+          <div id="sec-awards" class="hidden p-4 border-t border-slate-100 space-y-5">
+            <!-- Awards -->
+            <div class="space-y-2.5">
+              <h4 class="text-xs font-extrabold text-slate-700 flex items-center gap-1.5">
+                <i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i>
+                الجوائز والتكريمات (Awards & Honors)
+              </h4>
+              <div id="list-awards" class="space-y-3"></div>
+              <button type="button" onclick="addItem('awards')" class="w-full py-2 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>إضافة جائزة</span>
+              </button>
+            </div>
+            <hr class="border-slate-100" />
+            <!-- Certifications -->
+            <div class="space-y-2.5">
+              <h4 class="text-xs font-extrabold text-slate-700 flex items-center gap-1.5">
+                <i data-lucide="badge-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+                الشهادات والتدريبات المكثفة (Certifications & Training)
+              </h4>
+              <div id="list-certifications" class="space-y-3"></div>
+              <button type="button" onclick="addItem('certifications')" class="w-full py-2 rounded-xl border-2 border-dashed border-slate-300 text-slate-600 hover:border-slate-900 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>إضافة شهادة / تدريب</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Skills & Languages -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-skills')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center text-xs font-bold">7</span>
+              <span class="font-bold text-slate-800 text-sm">المهارات واللغات (Skills & Languages)</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-skills" class="w-4 h-4 text-slate-500 transition-transform"></i>
+          </button>
+          <div id="sec-skills" class="hidden p-4 border-t border-slate-100 space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">المهارات التقنية والبحثية (افصل بينها بفاصلة ,)</label>
+              <textarea id="input-skills" rows="2" oninput="updateCommaList('skills', this.value)" placeholder="HACCP, ISO 22000, Statistical Analysis (SPSS), Python, Lab Automation, Food Safety" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">اللغات (افصل بينها بفاصلة ,)</label>
+              <input type="text" id="input-languages" oninput="updateCommaList('languages', this.value)" placeholder="Arabic (Native), English (Fluent), German (Basic)" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Cover Letter Details -->
+        <div id="card-cover-letter" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <button type="button" onclick="toggleSection('sec-cover')" class="w-full px-4 py-3.5 flex items-center justify-between text-right bg-slate-50/70 hover:bg-slate-50 transition-colors">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">8</span>
+              <span class="font-bold text-slate-800 text-sm">بيانات خطاب التقديم (Cover Letter - اختياري)</span>
+            </div>
+            <i data-lucide="chevron-down" id="icon-sec-cover" class="w-4 h-4 text-slate-500 transition-transform"></i>
+          </button>
+          <div id="sec-cover" class="hidden p-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">تاريخ الخطاب</label>
+              <input type="text" id="input-cl-date" oninput="updateField('coverLetter','date',this.value)" placeholder="22 November 2026" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">اسم مسؤول التوظيف</label>
+              <input type="text" id="input-cl-manager" oninput="updateField('coverLetter','hiringManager',this.value)" placeholder="Hiring Manager" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">اسم الشركة / المؤسسة</label>
+              <input type="text" id="input-cl-company" oninput="updateField('coverLetter','company',this.value)" placeholder="Innovate Food Solutions" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">الوظيفة المستهدفة</label>
+              <input type="text" id="input-cl-role" oninput="updateField('coverLetter','targetRole',this.value)" placeholder="Senior Food Technologist" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1">الفقرة الأولى (الحماس والدافع للتقديم)</label>
+              <textarea id="input-cl-intro" rows="2" oninput="updateField('coverLetter','intro',this.value)" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1">الفقرة الثانية (أبرز الخبرات والإنجازات بالأرقام)</label>
+              <textarea id="input-cl-body" rows="3" oninput="updateField('coverLetter','body',this.value)" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1">الفقرة الثالثة (القيمة المضافة والخاتمة)</label>
+              <textarea id="input-cl-closing" rows="2" oninput="updateField('coverLetter','closing',this.value)" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/15 focus:border-slate-900"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Generate & Scroll to Preview Button -->
+      <button type="button" onclick="scrollToPreview()" class="w-full py-3.5 px-5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-2 transition-all">
+        <i data-lucide="file-check-2" class="w-5 h-5"></i>
+        <span>إنشاء وعرض المستند الكامل</span>
+      </button>
+    </section>
+
+    <!-- ==================== PREVIEW PANEL (LEFT IN RTL) ==================== -->
+    <section id="print-wrapper" class="lg:col-span-7 flex flex-col gap-4">
+
+      <!-- Spec Compliance Banner (Hidden on Print) -->
+      <div id="spec-banner" class="no-print bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <div id="spec-icon-wrap" class="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 id="spec-title" class="text-sm font-extrabold text-slate-900">مواصفات الـ CV الأكاديمي الشامل</h2>
+              <span id="spec-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">مطابق للدليل</span>
+            </div>
+            <p id="spec-desc" class="text-xs text-slate-600 mt-0.5 leading-relaxed">
+              شامل وغير مقيد بعدد الصفحات (عادةً 3 إلى 5+ صفحات) • مخصص للمجالات الأكاديمية والبحثية والعلمية والطبية • يشمل المنشورات، المشاريع البحثية، المؤتمرات، المنح، الخبرات والشهادات.
+            </p>
+          </div>
+        </div>
+        <button onclick="printDocument()" class="shrink-0 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-700 text-white transition-colors">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>تحميل PDF</span>
+        </button>
+      </div>
+
+      <!-- A4 Document Live Preview -->
+      <div id="document-preview" class="a4-paper rounded-2xl border border-slate-200">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== CUSTOM CLEAR CONFIRMATION MODAL ==================== -->
+  <div id="clear-modal" class="no-print fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200">
+      <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-base font-extrabold text-slate-900 mb-1">مسح جميع البيانات؟</h3>
+      <p class="text-sm text-slate-600 mb-5">سيتم تفريغ جميع الحقول لتبدأ من جديد. يمكنك دائماً إعادة تعبئة البيانات التجريبية بضغطة زر.</p>
+      <div class="flex items-center justify-end gap-2">
+        <button onclick="closeClearModal()" class="px-4 py-2 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors">إلغاء</button>
+        <button onclick="confirmClearData()" class="px-4 py-2 rounded-xl text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors">نعم، مسح الكل</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast" class="no-print fixed bottom-5 left-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2.5 text-sm font-semibold">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toast-msg">تم التحديث بنجاح</span>
+  </div>
+
+  <!-- ==================== APPLICATION SCRIPT ==================== -->
+  <script>
+    // =========================================================================
+    // 1. STATE & CONSTANTS
+    // =========================================================================
+    let state = {
+      docType: 'cv', // 'cv' | 'resume' | 'cover_letter'
+      docLang: 'en', // 'en' | 'ar'
+      data: getEmptyData()
+    };
+
+    function getEmptyData() {
+      return {
+        personal: {
+          fullName: '',
+          title: '',
+          phone: '',
+          email: '',
+          location: '',
+          website: '',
+          profile: ''
+        },
+        skills: [],
+        languages: [],
+        education: [],
+        experience: [],
+        publications: [],
+        research: [],
+        conferences: [],
+        awards: [],
+        certifications: [],
+        coverLetter: {
+          date: '',
+          hiringManager: '',
+          company: '',
+          targetRole: '',
+          intro: '',
+          body: '',
+          closing: ''
+        }
+      };
+    }
+
+    // Labels for English & Arabic Document Output
+    const LABELS = {
+      en: {
+        cvTag: 'CURRICULUM VITAE',
+        resumeTag: 'RESUME',
+        coverTag: 'COVER LETTER',
+        contact: 'CONTACT',
+        skills: 'CORE SKILLS',
+        languages: 'LANGUAGES',
+        awards: 'AWARDS & HONORS',
+        certifications: 'CERTIFICATIONS & TRAINING',
+        profile: 'ACADEMIC & PROFESSIONAL PROFILE',
+        resumeProfile: 'PROFESSIONAL PROFILE',
+        experience: 'EXPERIENCE',
+        publications: 'EXTENSIVE PUBLICATIONS',
+        research: 'RESEARCH PROJECTS',
+        conferences: 'CONFERENCES, GRANTS & TEACHING',
+        education: 'ACADEMIC EDUCATION',
+        dear: 'Dear',
+        hiringManagerFallback: 'Hiring Manager',
+        sincerely: 'Sincerely,',
+        emptyHint: 'Fill in the form or click "تعبئة بيانات تجريبية" to preview your document.'
+      },
+      ar: {
+        cvTag: 'السيرة الذاتية الأكاديمية (CV)',
+        resumeTag: 'الملخص المهني (Resume)',
+        coverTag: 'خطاب التقديم (Cover Letter)',
+        contact: 'بيانات التواصل',
+        skills: 'المهارات الأساسية',
+        languages: 'اللغات',
+        awards: 'الجوائز والتكريمات',
+        certifications: 'الشهادات والتدريبات',
+        profile: 'النبذة الأكاديمية والمهنية',
+        resumeProfile: 'الملخص المهني',
+        experience: 'الخبرات العملية',
+        publications: 'المنشورات العلمية',
+        research: 'المشاريع البحثية',
+        conferences: 'المؤتمرات والمنح والتدريس',
+        education: 'التعليم الأكاديمي',
+        dear: 'السيد/ة',
+        hiringManagerFallback: 'مسؤول التوظيف المحترم',
+        sincerely: 'وتفضلوا بقبول فائق الاحترام،',
+        emptyHint: 'ابدأ بملء الحقول أو اضغط على "تعبئة بيانات تجريبية" لمعاينة المستند.'
+      }
+    };
+
+    // Sample Data (Tailored to Food Technology / Academic Researcher in Egypt)
+    const SAMPLE_DATA = {
+      en: {
+        personal: {
+          fullName: 'Dr. Sarah Ahmed Hassan',
+          title: 'Food Technology Researcher & Quality Assurance Specialist',
+          phone: '+20 123 456 7890',
+          email: 'sarah.ahmed.foodtech@cu.edu.eg',
+          location: 'New Cairo, Egypt',
+          website: 'orcid.org/0000-0002-8491-3321',
+          profile: 'Dedicated Food Technology researcher and quality systems specialist with over 7 years of combined academic, laboratory, and industrial experience. Proven expertise in applying computer modeling, predictive microbiology, and HACCP/ISO 22000 frameworks to optimize food safety, extend shelf-life, and drive sustainable food processing innovations.'
+        },
+        skills: ['Food Safety & HACCP', 'ISO 22000 Auditing', 'Predictive Microbiology', 'SPSS & Python Data Analysis', 'Sensory Evaluation', 'Lab Information Systems (LIMS)', 'Thermal Processing Modeling', 'Scientific Writing'],
+        languages: ['Arabic (Native)', 'English (Fluent - IELTS 8.0)', 'German (Intermediate)'],
+        education: [
+          {
+            id: 'edu-1',
+            degree: 'Ph.D. in Food Science and Technology',
+            institution: 'Faculty of Agriculture, Cairo University',
+            location: 'Giza, Egypt',
+            year: '2022',
+            details: 'Dissertation: Computer-Aided Optimization of Thermal Sterilization and Shelf-Life Prediction in Dairy Products.'
+          },
+          {
+            id: 'edu-2',
+            degree: 'M.Sc. in Food Technology & Quality Control',
+            institution: 'Cairo University',
+            location: 'Giza, Egypt',
+            year: '2018',
+            details: 'Graduated with Distinction; focused on rapid spectrophotometric detection of food adulteration.'
+          },
+          {
+            id: 'edu-3',
+            degree: 'B.Sc. in Agricultural Sciences (Food Technology)',
+            institution: 'Cairo University',
+            location: 'Giza, Egypt',
+            year: '2015',
+            details: 'First Class Honors (GPA: 3.92 / 4.00).'
+          }
+        ],
+        experience: [
+          {
+            id: 'exp-1',
+            company: 'National Food Technology Research Center',
+            role: 'Senior Researcher & Lab Coordinator',
+            location: 'Cairo, Egypt',
+            period: '2022 – Present',
+            achievements: 'Led a multidisciplinary team of 6 researchers developing AI-assisted quality control workflows, reducing lab analysis turnaround time by 32%.\nImplemented automated LIMS tracking across 4 food microbiology laboratories, achieving 99.4% audit compliance.\nSecured EGP 1.2M in competitive national research grants for sustainable cold-chain monitoring.\nSupervised 5 M.Sc. theses and mentored 18 undergraduate research interns in computational food engineering.'
+          },
+          {
+            id: 'exp-2',
+            company: 'Nile Valley Food Industries (NVFI)',
+            role: 'Quality Assurance & HACCP Lead',
+            location: '10th of Ramadan, Egypt',
+            period: '2019 – 2022',
+            achievements: 'Spearheaded ISO 22000:2018 recertification with zero major non-conformities across 3 production lines.\nReduced product spoilage and customer complaints by 28% through statistical process control (SPC) dashboards.\nTrained over 120 production staff and lab technicians on Good Manufacturing Practices (GMP) and digital traceability.'
+          },
+          {
+            id: 'exp-3',
+            company: 'Cairo University – Dept. of Food Science',
+            role: 'Teaching & Research Assistant',
+            location: 'Giza, Egypt',
+            period: '2015 – 2019',
+            achievements: 'Delivered weekly practical sessions in Computer Applications in Food Technology and Food Chemistry for 200+ students.\nCo-authored 4 peer-reviewed journal articles and assisted in national dairy safety surveys.'
+          }
+        ],
+        publications: [
+          {
+            id: 'pub-1',
+            title: 'Machine Learning Models for Real-Time Shelf-Life Prediction of Pasteurized Dairy Products',
+            journal: 'Journal of Food Engineering (Elsevier), Vol. 358, pp. 111–124',
+            year: '2025',
+            coauthors: 'S. A. Hassan, M. El-Sayed, K. Mansour'
+          },
+          {
+            id: 'pub-2',
+            title: 'Digital Traceability and Computer-Aided HACCP Implementation in Egyptian Food SMEs',
+            journal: 'Food Control International, Vol. 149, Article 109712',
+            year: '2023',
+            coauthors: 'S. A. Hassan, R. Nabil'
+          },
+          {
+            id: 'pub-3',
+            title: 'Thermal Kinetics Modeling Using Python for Minimally Processed Fruit Juices',
+            journal: 'Egyptian Journal of Food Science, Vol. 50(2), pp. 45–59',
+            year: '2022',
+            coauthors: 'S. A. Hassan, A. Tarek, H. Mahmoud'
+          }
+        ],
+        research: [
+          {
+            id: 'res-1',
+            title: 'Smart IoT Cold-Chain Monitoring for Perishable Exports',
+            institution: 'STDF Funded Project – Cairo University',
+            role: 'Principal Investigator',
+            year: '2024 – 2026',
+            description: 'Designing low-cost IoT sensor networks integrated with predictive microbial growth algorithms to minimize post-harvest losses by 22%.'
+          },
+          {
+            id: 'res-2',
+            title: 'Rapid Spectral Imaging for Food Authenticity Verification',
+            institution: 'National Food Technology Research Center',
+            role: 'Co-Investigator',
+            year: '2022 – 2024',
+            description: 'Developed chemometric classification models achieving 96.5% accuracy in detecting olive oil and honey adulteration.'
+          }
+        ],
+        conferences: [
+          {
+            id: 'conf-1',
+            title: 'Keynote Speaker – International Conference on Food Innovation & Digital Agriculture',
+            type: 'Conference',
+            organization: 'Alexandria, Egypt',
+            year: '2025',
+            details: 'Presented on "Bridging Data Science and Food Safety Management Systems".'
+          },
+          {
+            id: 'conf-2',
+            title: 'STDF Young Researcher Excellence Grant (EGP 750,000)',
+            type: 'Grant',
+            organization: 'Science, Technology & Innovation Funding Authority',
+            year: '2024',
+            details: 'Awarded for smart cold-chain predictive modeling research.'
+          },
+          {
+            id: 'conf-3',
+            title: 'Visiting Lecturer – Computer Applications in Food Technology',
+            type: 'Teaching',
+            organization: 'Cairo University',
+            year: '2022 – Present',
+            details: 'Designing curriculum and lab assignments covering SPSS, Excel modeling, and LIMS software.'
+          }
+        ],
+        awards: [
+          { id: 'aw-1', title: 'Best Young Food Scientist Award', issuer: 'Egyptian Society of Food Science & Technology', year: '2024' },
+          { id: 'aw-2', title: 'Cairo University Distinction in Scientific Publication', issuer: 'Cairo University', year: '2023' },
+          { id: 'aw-3', title: 'Excellence in Quality Leadership', issuer: 'Nile Valley Food Industries', year: '2021' }
+        ],
+        certifications: [
+          { id: 'cert-1', title: 'ISO 22000:2018 Lead Auditor (IRCA Certified)', issuer: 'BSI Training Academy', year: '2023' },
+          { id: 'cert-2', title: 'Advanced HACCP & Food Defense Planning', issuer: 'NSF International', year: '2022' },
+          { id: 'cert-3', title: 'Applied Data Science with Python Specialization', issuer: 'University of Michigan (Coursera)', year: '2021' }
+        ],
+        coverLetter: {
+          date: '22 November 2026',
+          hiringManager: 'Hiring Manager',
+          company: 'Innovate Food Solutions',
+          targetRole: 'Senior Food Technology & Quality Manager',
+          intro: 'I am writing to express my strong enthusiasm for the Senior Food Technology & Quality Manager position at Innovate Food Solutions. With a Ph.D. in Food Science and over seven years of experience bridging academic research and industrial quality assurance, I am eager to contribute to your mission of delivering safe, innovative food products.',
+          body: 'Throughout my career at the National Food Technology Research Center and Nile Valley Food Industries, I have consistently delivered measurable improvements in operational quality and food safety. Most notably, I led the implementation of digital LIMS and statistical process control workflows that reduced laboratory turnaround times by 32% and lowered product spoilage by 28%, while maintaining zero major non-conformities during ISO 22000:2018 audits.',
+          closing: 'I deeply admire Innovate Food Solutions’ commitment to smart manufacturing and sustainability. I would welcome the opportunity to discuss how my scientific background, analytical rigor, and leadership in quality systems can bring immediate value to your team. Thank you for your time and consideration.'
+        }
+      },
+      ar: {
+        personal: {
+          fullName: 'د. سارة أحمد حسن',
+          title: 'باحثة في تكنولوجيا الأغذية وأخصائية ضمان الجودة',
+          phone: '+20 123 456 7890',
+          email: 'sarah.ahmed.foodtech@cu.edu.eg',
+          location: 'القاهرة الجديدة، مصر',
+          website: 'orcid.org/0000-0002-8491-3321',
+          profile: 'باحثة متخصصة في علوم وتكنولوجيا الأغذية وأنظمة سلامة الغذاء بخبرة تمتد لأكثر من 7 سنوات في البحث الأكاديمي والمختبرات والقطاع الصناعي. أتمتع بخبرة قوية في تطبيقات الحاسب الآلي والنمذجة الإحصائية وأنظمة HACCP وISO 22000 لتحسين جودة الأغذية وإطالة فترة الصلاحية ودعم الابتكار الغذائي.'
+        },
+        skills: ['سلامة الغذاء وHACCP', 'مراجعة ISO 22000', 'الميكروبيولوجيا التنبؤية', 'تحليل البيانات (SPSS وPython)', 'التقييم الحسي للأغذية', 'أنظمة إدارة المختبرات (LIMS)', 'النمذجة الحرارية', 'الكتابة العلمية'],
+        languages: ['العربية (اللغة الأم)', 'الإنجليزية (طلاقة تامة - IELTS 8.0)', 'الألمانية (متوسط)'],
+        education: [
+          {
+            id: 'edu-1',
+            degree: 'دكتوراه في علوم وتكنولوجيا الأغذية',
+            institution: 'كلية الزراعة، جامعة القاهرة',
+            location: 'الجيزة، مصر',
+            year: '2022',
+            details: 'عنوان الرسالة: التحسين الحاسوبي لعمليات التعقيم الحراري والتنبؤ بفترة صلاحية منتجات الألبان.'
+          },
+          {
+            id: 'edu-2',
+            degree: 'ماجستير في تكنولوجيا الأغذية ومراقبة الجودة',
+            institution: 'جامعة القاهرة',
+            location: 'الجيزة، مصر',
+            year: '2018',
+            details: 'تقدير امتياز؛ التركيز على الكشف السريع عن غش الأغذية باستخدام التحليل الطيفي.'
+          },
+          {
+            id: 'edu-3',
+            degree: 'بكالوريوس العلوم الزراعية (تخصص تكنولوجيا الأغذية)',
+            institution: 'جامعة القاهرة',
+            location: 'الجيزة، مصر',
+            year: '2015',
+            details: 'تقدير امتياز مع مرتبة الشرف (المعدل التراكمي: 3.92 / 4.00).'
+          }
+        ],
+        experience: [
+          {
+            id: 'exp-1',
+            company: 'المركز القومي لبحوث تكنولوجيا الأغذية',
+            role: 'باحث أول ومنسق مختبرات',
+            location: 'القاهرة، مصر',
+            period: '2022 – حتى الآن',
+            achievements: 'قيادة فريق بحثي مكون من 6 باحثين لتطوير نظم مراقبة جودة مدعومة بالذكاء الاصطناعي مما خفض زمن التحليل المعملي بنسبة 32%.\nتطبيق نظام إدارة المختبرات الرقمي (LIMS) في 4 معامل ميكروبيولوجي بنسبة امتثال 99.4% في المراجعات.\nالحصول على منحة بحثية تنافسية بقيمة 1.2 مليون جنيه لتطوير مراقبة سلاسل التبريد الذكية.\nالإشراف على 5 رسائل ماجستير وتدريب 18 طالباً جامعياً في تطبيقات الحاسب بتكنولوجيا الأغذية.'
+          },
+          {
+            id: 'exp-2',
+            company: 'شركة وادي النيل للصناعات الغذائية',
+            role: 'مسؤول ضمان الجودة ونظام HACCP',
+            location: 'العاشر من رمضان، مصر',
+            period: '2019 – 2022',
+            achievements: 'قيادة تجديد شهادة ISO 22000:2018 بدون أي حالات عدم مطابقة جسيمة عبر 3 خطوط إنتاج.\nخفض نسبة التالف وشكاوى العملاء بنسبة 28% باستخدام لوحات التحكم الإحصائي في العمليات (SPC).\nتدريب أكثر من 120 عاملاً وفني مختبر على ممارسات التصنيع الجيدة (GMP) والتتبع الرقمي.'
+          }
+        ],
+        publications: [
+          {
+            id: 'pub-1',
+            title: 'نماذج تعلم الآلة للتنبؤ اللحظي بفترة صلاحية منتجات الألبان المبسترة',
+            journal: 'مجلة هندسة الأغذية الدولية (Elsevier)، المجلد 358، ص 111-124',
+            year: '2025',
+            coauthors: 'سارة أحمد حسن، محمد السيد، خالد منصور'
+          },
+          {
+            id: 'pub-2',
+            title: 'التتبع الرقمي وتطبيق نظام HACCP المدعوم بالحاسب في المنشآت الغذائية المصرية',
+            journal: 'مجلة الرقابة الغذائية الدولية (Food Control)، المجلد 149',
+            year: '2023',
+            coauthors: 'سارة أحمد حسن، ريم نبيل'
+          }
+        ],
+        research: [
+          {
+            id: 'res-1',
+            title: 'مراقبة سلاسل التبريد الذكية للصادرات الغذائية باستخدام إنترنت الأشياء',
+            institution: 'مشروع ممول من هيئة تمويل العلوم والتكنولوجيا (STDF) – جامعة القاهرة',
+            role: 'الباحث الرئيسي (Principal Investigator)',
+            year: '2024 – 2026',
+            description: 'تصميم شبكة حساسات منخفضة التكلفة مدمجة مع خوارزميات التنبؤ الميكروبي لتقليل الفاقد بنسبة 22%.'
+          }
+        ],
+        conferences: [
+          {
+            id: 'conf-1',
+            title: 'متحدث رئيسي – المؤتمر الدولي لابتكار الأغذية والزراعة الرقمية',
+            type: 'مؤتمر',
+            organization: 'الإسكندرية، مصر',
+            year: '2025',
+            details: 'تقديم ورقة بحثية حول ربط علم البيانات بأنظمة إدارة سلامة الغذاء.'
+          },
+          {
+            id: 'conf-2',
+            title: 'منحة التميز للباحثين الشباب (750,000 جنيه مصري)',
+            type: 'منحة بحثية',
+            organization: 'هيئة تمويل العلوم والتكنولوجيا والابتكار (STDF)',
+            year: '2024',
+            details: 'دعم أبحاث النمذجة التنبؤية لسلاسل التبريد.'
+          },
+          {
+            id: 'conf-3',
+            title: 'محاضر زائر – مقرر تطبيقات الحاسب في تكنولوجيا الأغذية',
+            type: 'تدريس جامعي',
+            organization: 'جامعة القاهرة',
+            year: '2022 – حتى الآن',
+            details: 'إعداد وتدريس التطبيقات العملية لبرامج SPSS والنمذجة الإحصائية وإدارة المختبرات.'
+          }
+        ],
+        awards: [
+          { id: 'aw-1', title: 'جائزة أفضل باحث شاب في علوم الأغذية', issuer: 'الجمعية المصرية لعلوم وتكنولوجيا الأغذية', year: '2024' },
+          { id: 'aw-2', title: 'جائزة جامعة القاهرة للتميز في النشر العلمي الدولي', issuer: 'جامعة القاهرة', year: '2023' }
+        ],
+        certifications: [
+          { id: 'cert-1', title: 'مراجع رئيسي معتمد ISO 22000:2018 (IRCA)', issuer: 'أكاديمية BSI للتدريب', year: '2023' },
+          { id: 'cert-2', title: 'تخطيط نظام HACCP المتقدم وحماية الأغذية', issuer: 'مؤسسة NSF الدولية', year: '2022' },
+          { id: 'cert-3', title: 'تخصص علم البيانات التطبيقي باستخدام Python', issuer: 'جامعة ميشيغان (Coursera)', year: '2021' }
+        ],
+        coverLetter: {
+          date: '22 نوفمبر 2026',
+          hiringManager: 'السيد مدير التوظيف المحترم',
+          company: 'شركة إنوفيت لحلول الأغذية',
+          targetRole: 'مدير أول تكنولوجيا الأغذية وضمان الجودة',
+          intro: 'أتقدم إليكم بهذا الخطاب معرباً عن حماسي الشديد للانضمام إلى فريقكم في وظيفة مدير أول تكنولوجيا الأغذية وضمان الجودة بشركة إنوفيت لحلول الأغذية. بفضل حصولي على درجة الدكتوراه وخبرة تتجاوز 7 سنوات تجمع بين البحث العلمي وضمان الجودة الصناعية، أتطلع للمساهمة الفعالة في تحقيق أهدافكم.',
+          body: 'خلال مسيرتي في المركز القومي لبحوث تكنولوجيا الأغذية وشركة وادي النيل للصناعات الغذائية، نجحت في تحقيق نتائج ملموسة شملت خفض زمن التحليل المعملي بنسبة 32% عبر تطبيق أنظمة LIMS الرقمية، وتقليل التالف بنسبة 28% باستخدام أدوات التحكم الإحصائي، مع اجتياز مراجعات ISO 22000:2018 دون أي ملاحظات جسيمة.',
+          closing: 'أُقدّر كثيراً رؤية شركتكم في التصنيع الذكي والاستدامة الغذائية، ويسعدني مناقشة كيف يمكن لخبراتي البحثية والقيادية أن تضيف قيمة فورية لفريق الجودة لديكم. شاكرين لكم وقتكم واهتمامكم.'
+        }
+      }
+    };
+
+    // =========================================================================
+    // 2. INITIALIZATION & UI CONTROLS
+    // =========================================================================
+    function init() {
+      // Start with rich sample data so the user immediately sees the exact CV design
+      state.data = JSON.parse(JSON.stringify(SAMPLE_DATA[state.docLang]));
+      syncFormInputs();
+      renderDynamicLists();
+      updateTabsUI();
+      updateLangUI();
+      renderDocument();
+      lucide.createIcons();
+    }
+
+    function setDocType(type) {
+      state.docType = type;
+      updateTabsUI();
+      renderDocument();
+      // Auto-expand cover letter section when cover letter tab is selected
+      if (type === 'cover_letter') {
+        const el = document.getElementById('sec-cover');
+        const icon = document.getElementById('icon-sec-cover');
+        if (el.classList.contains('hidden')) {
+          el.classList.remove('hidden');
+          icon.classList.add('rotate-180');
+        }
+      }
+    }
+
+    function setDocLang(lang) {
+      if (state.docLang === lang) return;
+      state.docLang = lang;
+      updateLangUI();
+      renderDocument();
+      showToast(lang === 'en' ? 'تم تحويل اتجاه ولغة المستند إلى الإنجليزية (LTR)' : 'تم تحويل اتجاه ولغة المستند إلى العربية (RTL)');
+    }
+
+    function updateTabsUI() {
+      const map = { cv: 'tab-cv', resume: 'tab-resume', cover_letter: 'tab-cover' };
+      Object.entries(map).forEach(([key, id]) => {
+        const btn = document.getElementById(id);
+        if (key === state.docType) {
+          btn.className = 'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm transition-all';
+        } else {
+          btn.className = 'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 transition-all';
+        }
+      });
+      updateSpecBanner();
+    }
+
+    function updateLangUI() {
+      const enBtn = document.getElementById('lang-en');
+      const arBtn = document.getElementById('lang-ar');
+      if (state.docLang === 'en') {
+        enBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-900 text-white shadow-sm transition-all';
+        arBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition-all';
+      } else {
+        arBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-900 text-white shadow-sm transition-all';
+        enBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition-all';
+      }
+    }
+
+    function updateSpecBanner() {
+      const title = document.getElementById('spec-title');
+      const desc = document.getElementById('spec-desc');
+      const badge = document.getElementById('spec-badge');
+
+      if (state.docType === 'cv') {
+        title.textContent = 'مواصفات الـ CV الأكاديمي الشامل (Curriculum Vitae)';
+        badge.textContent = 'شامل • متعدد الصفحات';
+        desc.textContent = 'مخصص للمجالات الأكاديمية، البحثية، العلمية، الزمالات والتعليم العالي. يشمل تسلسلاً زمنياً مفصلاً للخبرات، المنشورات العلمية، المشاريع البحثية، المؤتمرات، المنح، الجوائز والشهادات.';
+      } else if (state.docType === 'resume') {
+        title.textContent = 'مواصفات الملخص المهني (Resume)';
+        badge.textContent = 'مختصر • صفحة واحدة';
+        desc.textContent = 'مخصص للتقديم في الشركات والقطاع الخاص والصناعي. يعرض ملخصاً مركزاً ومخصصاً لأهم الخبرات العملية بإنجازات رقمية، المهارات الأساسية، والتعليم في صفحة واحدة أنيقة.';
+      } else {
+        title.textContent = 'مواصفات خطاب التقديم (Cover Letter)';
+        badge.textContent = 'رسمي • صفحة واحدة (3-4 فقرات)';
+        desc.textContent = 'يُرفق مع الـ CV أو الـ Resume لإظهار حماسك وإقناع مسؤول التوظيف بأنك المرشح الأمثل عبر 3 إلى 4 فقرات منظمة ورسمية.';
+      }
+    }
+
+    function toggleSection(id) {
+      const content = document.getElementById(id);
+      const icon = document.getElementById('icon-' + id);
+      const isHidden = content.classList.contains('hidden');
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        content.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    function loadSampleData() {
+      state.data = JSON.parse(JSON.stringify(SAMPLE_DATA[state.docLang]));
+      syncFormInputs();
+      renderDynamicLists();
+      renderDocument();
+      showToast('تمت تعبئة بيانات تجريبية كاملة مطابقة للدليل');
+    }
+
+    function openClearModal() {
+      const m = document.getElementById('clear-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeClearModal() {
+      const m = document.getElementById('clear-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function confirmClearData() {
+      state.data = getEmptyData();
+      syncFormInputs();
+      renderDynamicLists();
+      renderDocument();
+      closeClearModal();
+      showToast('تم مسح جميع البيانات، يمكنك البدء بملء بياناتك الآن');
+    }
+
+    function scrollToPreview() {
+      renderDocument();
+      const target = document.getElementById('document-preview');
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showToast('تم إنشاء وتحديث المستند بنجاح!');
+    }
+
+    function printDocument() {
+      window.print();
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    // =========================================================================
+    // 3. FORM DATA BINDING & DYNAMIC LISTS
+    // =========================================================================
+    function syncFormInputs() {
+      const p = state.data.personal;
+      document.getElementById('input-fullName').value = p.fullName || '';
+      document.getElementById('input-title').value = p.title || '';
+      document.getElementById('input-phone').value = p.phone || '';
+      document.getElementById('input-email').value = p.email || '';
+      document.getElementById('input-location').value = p.location || '';
+      document.getElementById('input-website').value = p.website || '';
+      document.getElementById('input-profile').value = p.profile || '';
+
+      document.getElementById('input-skills').value = (state.data.skills || []).join(', ');
+      document.getElementById('input-languages').value = (state.data.languages || []).join(', ');
+
+      const cl = state.data.coverLetter;
+      document.getElementById('input-cl-date').value = cl.date || '';
+      document.getElementById('input-cl-manager').value = cl.hiringManager || '';
+      document.getElementById('input-cl-company').value = cl.company || '';
+      document.getElementById('input-cl-role').value = cl.targetRole || '';
+      document.getElementById('input-cl-intro').value = cl.intro || '';
+      document.getElementById('input-cl-body').value = cl.body || '';
+      document.getElementById('input-cl-closing').value = cl.closing || '';
+    }
+
+    function updateField(section, key, value) {
+      state.data[section][key] = value;
+      renderDocument();
+    }
+
+    function updateCommaList(key, value) {
+      state.data[key] = value.split(/[,،]/).map(s => s.trim()).filter(Boolean);
+      renderDocument();
+    }
+
+    function addItem(listName) {
+      const id = listName + '-' + Date.now();
+      const templates = {
+        education: { id, degree: '', institution: '', location: '', year: '', details: '' },
+        experience: { id, company: '', role: '', location: '', period: '', achievements: '' },
+        publications: { id, title: '', journal: '', year: '', coauthors: '' },
+        research: { id, title: '', institution: '', role: '', year: '', description: '' },
+        conferences: { id, title: '', type: 'Conference', organization: '', year: '', details: '' },
+        awards: { id, title: '', issuer: '', year: '' },
+        certifications: { id, title: '', issuer: '', year: '' }
+      };
+      state.data[listName].push(templates[listName]);
+      renderDynamicLists();
+      renderDocument();
+    }
+
+    function removeItem(listName, index) {
+      state.data[listName].splice(index, 1);
+      renderDynamicLists();
+      renderDocument();
+    }
+
+    function updateListItem(listName, index, field, value) {
+      if (state.data[listName][index]) {
+        state.data[listName][index][field] = value;
+        renderDocument();
+      }
+    }
+
+    function escapeAttr(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function renderDynamicLists() {
+      // Update Counters
+      document.getElementById('count-education').textContent = state.data.education.length;
+      document.getElementById('count-experience').textContent = state.data.experience.length;
+      document.getElementById('count-research-total').textContent = state.data.publications.length + state.data.research.length;
+      document.getElementById('count-conferences').textContent = state.data.conferences.length;
+      document.getElementById('count-awards-total').textContent = state.data.awards.length + state.data.certifications.length;
+
+      // 1. Education
+      document.getElementById('list-education').innerHTML = state.data.education.map((item, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2 relative">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">مؤهل #${i + 1}</span>
+            <button type="button" onclick="removeItem('education', ${i})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i> حذف
+            </button>
+          </div>
+          <input type="text" value="${escapeAttr(item.degree)}" oninput="updateListItem('education',${i},'degree',this.value)" placeholder="الدرجة العلمية (مثال: Ph.D. in Food Science)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" value="${escapeAttr(item.institution)}" oninput="updateListItem('education',${i},'institution',this.value)" placeholder="الجامعة / المؤسسة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.year)}" oninput="updateListItem('education',${i},'year',this.value)" placeholder="سنة التخرج (مثال: 2022)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+          <input type="text" value="${escapeAttr(item.location)}" oninput="updateListItem('education',${i},'location',this.value)" placeholder="الموقع (مثال: Cairo, Egypt)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          <input type="text" value="${escapeAttr(item.details)}" oninput="updateListItem('education',${i},'details',this.value)" placeholder="تفاصيل إضافية (عنوان الرسالة / التقدير)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+        </div>
+      `).join('');
+
+      // 2. Experience
+      document.getElementById('list-experience').innerHTML = state.data.experience.map((item, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">خبرة #${i + 1}</span>
+            <button type="button" onclick="removeItem('experience', ${i})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i> حذف
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" value="${escapeAttr(item.role)}" oninput="updateListItem('experience',${i},'role',this.value)" placeholder="المسمى الوظيفي" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.company)}" oninput="updateListItem('experience',${i},'company',this.value)" placeholder="جهة العمل / الجامعة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" value="${escapeAttr(item.period)}" oninput="updateListItem('experience',${i},'period',this.value)" placeholder="الفترة (2021 – Present)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.location)}" oninput="updateListItem('experience',${i},'location',this.value)" placeholder="الموقع" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+          <textarea rows="3" oninput="updateListItem('experience',${i},'achievements',this.value)" placeholder="أبرز الإنجازات بالأرقام (كل إنجاز في سطر منفصل)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs">${escapeHtml(item.achievements)}</textarea>
+        </div>
+      `).join('');
+
+      // 3. Publications
+      document.getElementById('list-publications').innerHTML = state.data.publications.map((item, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">منشور #${i + 1}</span>
+            <button type="button" onclick="removeItem('publications', ${i})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i> حذف
+            </button>
+          </div>
+          <input type="text" value="${escapeAttr(item.title)}" oninput="updateListItem('publications',${i},'title',this.value)" placeholder="عنوان البحث المنشور" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" value="${escapeAttr(item.journal)}" oninput="updateListItem('publications',${i},'journal',this.value)" placeholder="المجلة العلمية / الناشر" class="col-span-2 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.year)}" oninput="updateListItem('publications',${i},'year',this.value)" placeholder="السنة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+          <input type="text" value="${escapeAttr(item.coauthors)}" oninput="updateListItem('publications',${i},'coauthors',this.value)" placeholder="المؤلفون المشاركون" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+        </div>
+      `).join('');
+
+      // 4. Research Projects
+      document.getElementById('list-research').innerHTML = state.data.research.map((item, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">مشروع بحثي #${i + 1}</span>
+            <button type="button" onclick="removeItem('research', ${i})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i> حذف
+            </button>
+          </div>
+          <input type="text" value="${escapeAttr(item.title)}" oninput="updateListItem('research',${i},'title',this.value)" placeholder="اسم المشروع البحثي" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" value="${escapeAttr(item.institution)}" oninput="updateListItem('research',${i},'institution',this.value)" placeholder="المؤسسة / الجهة الممولة" class="col-span-2 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.year)}" oninput="updateListItem('research',${i},'year',this.value)" placeholder="الفترة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+          <input type="text" value="${escapeAttr(item.role)}" oninput="updateListItem('research',${i},'role',this.value)" placeholder="دورك (مثال: Principal Investigator)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          <textarea rows="2" oninput="updateListItem('research',${i},'description',this.value)" placeholder="وصف مختصر للمشروع ونتائجه" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs">${escapeHtml(item.description)}</textarea>
+        </div>
+      `).join('');
+
+      // 5. Conferences, Grants & Teaching
+      document.getElementById('list-conferences').innerHTML = state.data.conferences.map((item, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">بند #${i + 1}</span>
+            <button type="button" onclick="removeItem('conferences', ${i})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i> حذف
+            </button>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" value="${escapeAttr(item.type)}" oninput="updateListItem('conferences',${i},'type',this.value)" placeholder="النوع (Conference/Grant/Teaching)" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.title)}" oninput="updateListItem('conferences',${i},'title',this.value)" placeholder="العنوان" class="col-span-2 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" value="${escapeAttr(item.organization)}" oninput="updateListItem('conferences',${i},'organization',this.value)" placeholder="الجهة المنظمة / المانحة" class="col-span-2 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.year)}" oninput="updateListItem('conferences',${i},'year',this.value)" placeholder="السنة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+          <input type="text" value="${escapeAttr(item.details)}" oninput="updateListItem('conferences',${i},'details',this.value)" placeholder="تفاصيل مختصرة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+        </div>
+      `).join('');
+
+      // 6. Awards
+      document.getElementById('list-awards').innerHTML = state.data.awards.map((item, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">جائزة #${i + 1}</span>
+            <button type="button" onclick="removeItem('awards', ${i})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i> حذف
+            </button>
+          </div>
+          <input type="text" value="${escapeAttr(item.title)}" oninput="updateListItem('awards',${i},'title',this.value)" placeholder="اسم الجائزة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" value="${escapeAttr(item.issuer)}" oninput="updateListItem('awards',${i},'issuer',this.value)" placeholder="الجهة المانحة" class="col-span-2 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.year)}" oninput="updateListItem('awards',${i},'year',this.value)" placeholder="السنة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+        </div>
+      `).join('');
+
+      // 7. Certifications
+      document.getElementById('list-certifications').innerHTML = state.data.certifications.map((item, i) => `
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-500">شهادة / تدريب #${i + 1}</span>
+            <button type="button" onclick="removeItem('certifications', ${i})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i> حذف
+            </button>
+          </div>
+          <input type="text" value="${escapeAttr(item.title)}" oninput="updateListItem('certifications',${i},'title',this.value)" placeholder="اسم الشهادة أو التدريب" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          <div class="grid grid-cols-3 gap-2">
+            <input type="text" value="${escapeAttr(item.issuer)}" oninput="updateListItem('certifications',${i},'issuer',this.value)" placeholder="الجهة المصدرة" class="col-span-2 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+            <input type="text" value="${escapeAttr(item.year)}" oninput="updateListItem('certifications',${i},'year',this.value)" placeholder="السنة" class="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs" />
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 4. DOCUMENT RENDERERS (CV, RESUME, COVER LETTER)
+    // =========================================================================
+    function renderDocument() {
+      const container = document.getElementById('document-preview');
+      const langClass = state.docLang === 'en' ? 'doc-en' : 'doc-ar';
+      container.className = `a4-paper rounded-2xl border border-slate-200 ${langClass}`;
+
+      const d = state.data;
+      const L = LABELS[state.docLang];
+
+      // Empty state check
+      const hasAnyData = d.personal.fullName || d.personal.email || d.experience.length || d.education.length;
+      if (!hasAnyData) {
+        container.innerHTML = `
+          <div class="min-h-[297mm] flex flex-col items-center justify-center p-10 text-center text-slate-400">
+            <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+              <i data-lucide="file-plus" class="w-8 h-8 text-slate-400"></i>
+            </div>
+            <p class="text-base font-bold text-slate-600 mb-1">${L.emptyHint}</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      if (state.docType === 'cv') {
+        container.innerHTML = renderCV(d, L);
+      } else if (state.docType === 'resume') {
+        container.innerHTML = renderResume(d, L);
+      } else {
+        container.innerHTML = renderCoverLetter(d, L);
+      }
+
+      lucide.createIcons();
+    }
+
+    // Inline SVG Icons for crisp printing inside document
+    const SVG_ICONS = {
+      phone: `<svg class="w-3.5 h-3.5 shrink-0 text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+      mail: `<svg class="w-3.5 h-3.5 shrink-0 text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+      pin: `<svg class="w-3.5 h-3.5 shrink-0 text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+      globe: `<svg class="w-3.5 h-3.5 shrink-0 text-sky-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>`
+    };
+
+    function renderBullets(text) {
+      if (!text) return '';
+      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+      if (!lines.length) return '';
+      return `
+        <ul class="mt-1.5 space-y-1 text-[11.5px] text-slate-700 leading-relaxed list-disc list-outside ps-4">
+          ${lines.map(l => `<li>${escapeHtml(l)}</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    // -------------------- A. FULL ACADEMIC CV RENDERER --------------------
+    function renderCV(d, L) {
+      const p = d.personal;
+
+      return `
+        <div class="grid grid-cols-12 min-h-[297mm]">
+          <!-- DARK SLATE SIDEBAR (Matching PDF Design) -->
+          <aside class="print-sidebar col-span-12 sm:col-span-4 bg-[#1e293b] text-slate-100 p-6 flex flex-col gap-6">
+            <!-- Contact -->
+            <div>
+              <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-3">${L.contact}</h3>
+              <div class="space-y-2.5 text-[11.5px] text-slate-200 break-words">
+                ${p.phone ? `<div class="flex items-start gap-2">${SVG_ICONS.phone}<span dir="ltr">${escapeHtml(p.phone)}</span></div>` : ''}
+                ${p.email ? `<div class="flex items-start gap-2">${SVG_ICONS.mail}<span class="break-all">${escapeHtml(p.email)}</span></div>` : ''}
+                ${p.location ? `<div class="flex items-start gap-2">${SVG_ICONS.pin}<span>${escapeHtml(p.location)}</span></div>` : ''}
+                ${p.website ? `<div class="flex items-start gap-2">${SVG_ICONS.globe}<span class="break-all">${escapeHtml(p.website)}</span></div>` : ''}
+              </div>
+            </div>
+
+            <!-- Skills -->
+            ${d.skills.length ? `
+              <div>
+                <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-3">${L.skills}</h3>
+                <div class="flex flex-wrap gap-1.5">
+                  ${d.skills.map(s => `<span class="text-[10.5px] px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-100">${escapeHtml(s)}</span>`).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- Languages -->
+            ${d.languages.length ? `
+              <div>
+                <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-3">${L.languages}</h3>
+                <ul class="space-y-1.5 text-[11.5px] text-slate-200">
+                  ${d.languages.map(lang => `<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span><span>${escapeHtml(lang)}</span></li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            <!-- Awards & Honors -->
+            ${d.awards.length ? `
+              <div class="avoid-break">
+                <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-3">${L.awards}</h3>
+                <div class="space-y-2.5">
+                  ${d.awards.map(a => `
+                    <div class="text-[11px]">
+                      <div class="font-bold text-white leading-snug">${escapeHtml(a.title)}</div>
+                      <div class="text-slate-400 text-[10.5px]">${escapeHtml(a.issuer)}${a.year ? ` • ${escapeHtml(a.year)}` : ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- Certifications & Extensive Training -->
+            ${d.certifications.length ? `
+              <div class="avoid-break">
+                <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-3">${L.certifications}</h3>
+                <div class="space-y-2.5">
+                  ${d.certifications.map(c => `
+                    <div class="text-[11px]">
+                      <div class="font-bold text-white leading-snug">${escapeHtml(c.title)}</div>
+                      <div class="text-slate-400 text-[10.5px]">${escapeHtml(c.issuer)}${c.year ? ` • ${escapeHtml(c.year)}` : ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </aside>
+
+          <!-- WHITE MAIN CONTENT AREA -->
+          <div class="col-span-12 sm:col-span-8 p-7 flex flex-col gap-5 bg-white">
+            <!-- Header -->
+            <header class="border-b-2 border-slate-900 pb-4">
+              <div class="text-[10.5px] font-extrabold tracking-[0.2em] uppercase text-sky-700 mb-1">${L.cvTag}</div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">${escapeHtml(p.fullName || 'Your Name')}</h1>
+              ${p.title ? `<p class="text-sm font-semibold text-slate-600 mt-1">${escapeHtml(p.title)}</p>` : ''}
+            </header>
+
+            <!-- Profile -->
+            ${p.profile ? `
+              <section class="avoid-break">
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2">${L.profile}</h2>
+                <p class="text-[11.5px] text-slate-700 leading-relaxed">${escapeHtml(p.profile)}</p>
+              </section>
+            ` : ''}
+
+            <!-- Academic Education -->
+            ${d.education.length ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2.5">${L.education}</h2>
+                <div class="space-y-3">
+                  ${d.education.map(edu => `
+                    <div class="avoid-break">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <h3 class="text-[12.5px] font-bold text-slate-900">${escapeHtml(edu.degree)}</h3>
+                        ${edu.year ? `<span class="text-[11px] font-bold text-sky-700 shrink-0">${escapeHtml(edu.year)}</span>` : ''}
+                      </div>
+                      <div class="text-[11.5px] font-semibold text-slate-600">${escapeHtml(edu.institution)}${edu.location ? ` — ${escapeHtml(edu.location)}` : ''}</div>
+                      ${edu.details ? `<p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">${escapeHtml(edu.details)}</p>` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              </section>
+            ` : ''}
+
+            <!-- Experience -->
+            ${d.experience.length ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2.5">${L.experience}</h2>
+                <div class="space-y-4">
+                  ${d.experience.map(exp => `
+                    <div class="avoid-break">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <h3 class="text-[12.5px] font-bold text-slate-900">${escapeHtml(exp.role)}</h3>
+                        ${exp.period ? `<span class="text-[11px] font-bold text-sky-700 shrink-0">${escapeHtml(exp.period)}</span>` : ''}
+                      </div>
+                      <div class="text-[11.5px] font-semibold text-slate-600">${escapeHtml(exp.company)}${exp.location ? ` • ${escapeHtml(exp.location)}` : ''}</div>
+                      ${renderBullets(exp.achievements)}
+                    </div>
+                  `).join('')}
+                </div>
+              </section>
+            ` : ''}
+
+            <!-- Extensive Publications -->
+            ${d.publications.length ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2.5">${L.publications}</h2>
+                <div class="space-y-2.5">
+                  ${d.publications.map(pub => `
+                    <div class="avoid-break text-[11.5px]">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <span class="font-bold text-slate-900">${escapeHtml(pub.title)}</span>
+                        ${pub.year ? `<span class="text-[11px] font-bold text-sky-700 shrink-0">${escapeHtml(pub.year)}</span>` : ''}
+                      </div>
+                      ${pub.journal ? `<div class="text-slate-600 italic text-[11px]">${escapeHtml(pub.journal)}</div>` : ''}
+                      ${pub.coauthors ? `<div class="text-slate-500 text-[10.5px]">${escapeHtml(pub.coauthors)}</div>` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              </section>
+            ` : ''}
+
+            <!-- Research Projects -->
+            ${d.research.length ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2.5">${L.research}</h2>
+                <div class="space-y-3">
+                  ${d.research.map(res => `
+                    <div class="avoid-break">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <h3 class="text-[12px] font-bold text-slate-900">${escapeHtml(res.title)}</h3>
+                        ${res.year ? `<span class="text-[11px] font-bold text-sky-700 shrink-0">${escapeHtml(res.year)}</span>` : ''}
+                      </div>
+                      <div class="text-[11px] font-semibold text-slate-600">${escapeHtml(res.institution)}${res.role ? ` • ${escapeHtml(res.role)}` : ''}</div>
+                      ${res.description ? `<p class="text-[11px] text-slate-700 mt-0.5 leading-relaxed">${escapeHtml(res.description)}</p>` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              </section>
+            ` : ''}
+
+            <!-- Conferences, Grants & Teaching -->
+            ${d.conferences.length ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2.5">${L.conferences}</h2>
+                <div class="space-y-2.5">
+                  ${d.conferences.map(conf => `
+                    <div class="avoid-break">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <div class="text-[11.5px] font-bold text-slate-900">
+                          ${conf.type ? `<span class="inline-block text-[9.5px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 me-1.5">${escapeHtml(conf.type)}</span>` : ''}
+                          ${escapeHtml(conf.title)}
+                        </div>
+                        ${conf.year ? `<span class="text-[11px] font-bold text-sky-700 shrink-0">${escapeHtml(conf.year)}</span>` : ''}
+                      </div>
+                      ${conf.organization ? `<div class="text-[11px] font-semibold text-slate-600">${escapeHtml(conf.organization)}</div>` : ''}
+                      ${conf.details ? `<p class="text-[11px] text-slate-600 mt-0.5">${escapeHtml(conf.details)}</p>` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              </section>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------- B. 1-PAGE RESUME RENDERER --------------------
+    function renderResume(d, L) {
+      const p = d.personal;
+      // Resume spec: Concise, tailored 1-page summary (top 2-3 experiences, education, skills)
+      const topExp = d.experience.slice(0, 3);
+      const topEdu = d.education.slice(0, 2);
+      const topCerts = d.certifications.slice(0, 3);
+
+      return `
+        <div class="grid grid-cols-12 min-h-[297mm]">
+          <!-- Compact Dark Sidebar -->
+          <aside class="print-sidebar col-span-12 sm:col-span-4 bg-[#1e293b] text-slate-100 p-6 flex flex-col gap-5">
+            <div>
+              <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-3">${L.contact}</h3>
+              <div class="space-y-2 text-[11px] text-slate-200 break-words">
+                ${p.phone ? `<div class="flex items-start gap-2">${SVG_ICONS.phone}<span dir="ltr">${escapeHtml(p.phone)}</span></div>` : ''}
+                ${p.email ? `<div class="flex items-start gap-2">${SVG_ICONS.mail}<span class="break-all">${escapeHtml(p.email)}</span></div>` : ''}
+                ${p.location ? `<div class="flex items-start gap-2">${SVG_ICONS.pin}<span>${escapeHtml(p.location)}</span></div>` : ''}
+                ${p.website ? `<div class="flex items-start gap-2">${SVG_ICONS.globe}<span class="break-all">${escapeHtml(p.website)}</span></div>` : ''}
+              </div>
+            </div>
+
+            ${d.skills.length ? `
+              <div>
+                <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-2.5">${L.skills}</h3>
+                <ul class="space-y-1.5 text-[11px] text-slate-200">
+                  ${d.skills.slice(0, 10).map(s => `<li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span><span>${escapeHtml(s)}</span></li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            ${d.languages.length ? `
+              <div>
+                <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-2.5">${L.languages}</h3>
+                <ul class="space-y-1 text-[11px] text-slate-200">
+                  ${d.languages.map(lang => `<li>${escapeHtml(lang)}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            ${topCerts.length ? `
+              <div>
+                <h3 class="text-[11px] font-extrabold tracking-widest uppercase text-sky-400 border-b border-slate-700 pb-1.5 mb-2.5">${L.certifications}</h3>
+                <div class="space-y-2">
+                  ${topCerts.map(c => `
+                    <div class="text-[10.5px]">
+                      <div class="font-bold text-white">${escapeHtml(c.title)}</div>
+                      <div class="text-slate-400">${escapeHtml(c.issuer)}${c.year ? ` • ${escapeHtml(c.year)}` : ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </aside>
+
+          <!-- Compact White Main Area -->
+          <div class="col-span-12 sm:col-span-8 p-6 flex flex-col gap-4 bg-white">
+            <header class="border-b-2 border-slate-900 pb-3">
+              <div class="text-[10px] font-extrabold tracking-[0.2em] uppercase text-sky-700 mb-0.5">${L.resumeTag}</div>
+              <h1 class="text-2xl font-extrabold text-slate-900 leading-tight">${escapeHtml(p.fullName || 'Your Name')}</h1>
+              ${p.title ? `<p class="text-sm font-semibold text-slate-600 mt-0.5">${escapeHtml(p.title)}</p>` : ''}
+            </header>
+
+            ${p.profile ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-1.5">${L.resumeProfile}</h2>
+                <p class="text-[11px] text-slate-700 leading-relaxed">${escapeHtml(p.profile)}</p>
+              </section>
+            ` : ''}
+
+            ${topExp.length ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2">${L.experience}</h2>
+                <div class="space-y-3">
+                  ${topExp.map(exp => `
+                    <div class="avoid-break">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <h3 class="text-[12px] font-bold text-slate-900">${escapeHtml(exp.role)}</h3>
+                        <span class="text-[10.5px] font-bold text-sky-700 shrink-0">${escapeHtml(exp.period)}</span>
+                      </div>
+                      <div class="text-[11px] font-semibold text-slate-600">${escapeHtml(exp.company)}${exp.location ? ` • ${escapeHtml(exp.location)}` : ''}</div>
+                      ${renderBullets(exp.achievements)}
+                    </div>
+                  `).join('')}
+                </div>
+              </section>
+            ` : ''}
+
+            ${topEdu.length ? `
+              <section>
+                <h2 class="text-xs font-extrabold tracking-wider uppercase text-slate-900 border-b border-slate-200 pb-1 mb-2">${L.education}</h2>
+                <div class="space-y-2">
+                  ${topEdu.map(edu => `
+                    <div class="avoid-break">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <h3 class="text-[12px] font-bold text-slate-900">${escapeHtml(edu.degree)}</h3>
+                        <span class="text-[10.5px] font-bold text-sky-700 shrink-0">${escapeHtml(edu.year)}</span>
+                      </div>
+                      <div class="text-[11px] text-slate-600">${escapeHtml(edu.institution)}${edu.location ? ` — ${escapeHtml(edu.location)}` : ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </section>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------- C. 1-PAGE COVER LETTER RENDERER --------------------
+    function renderCoverLetter(d, L) {
+      const p = d.personal;
+      const cl = d.coverLetter;
+
+      const defaultIntro = state.docLang === 'en'
+        ? `I am writing to express my strong interest in the ${cl.targetRole || p.title || 'open'} position at ${cl.company || 'your organization'}. ${p.profile || ''}`
+        : `أتقدم إليكم بهذا الخطاب للتعبير عن اهتمامي الكبير بالتقدم لوظيفة ${cl.targetRole || p.title || 'المعلن عنها'} لدى ${cl.company || 'مؤسستكم الموقرة'}. ${p.profile || ''}`;
+
+      return `
+        <div class="min-h-[297mm] flex flex-col bg-white">
+          <!-- Formal Dark Header -->
+          <header class="print-header-dark bg-[#1e293b] text-white px-10 py-8">
+            <div class="text-[10.5px] font-extrabold tracking-[0.2em] uppercase text-sky-400 mb-1">${L.coverTag}</div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">${escapeHtml(p.fullName || 'Your Name')}</h1>
+            ${p.title ? `<p class="text-sm text-slate-300 mt-1">${escapeHtml(p.title)}</p>` : ''}
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-4 text-xs text-slate-300">
+              ${p.phone ? `<span class="flex items-center gap-1.5">${SVG_ICONS.phone}<span dir="ltr">${escapeHtml(p.phone)}</span></span>` : ''}
+              ${p.email ? `<span class="flex items-center gap-1.5">${SVG_ICONS.mail}<span>${escapeHtml(p.email)}</span></span>` : ''}
+              ${p.location ? `<span class="flex items-center gap-1.5">${SVG_ICONS.pin}<span>${escapeHtml(p.location)}</span></span>` : ''}
+            </div>
+          </header>
+
+          <!-- Letter Body -->
+          <div class="p-10 flex-1 flex flex-col gap-6 text-[13px] text-slate-800 leading-relaxed">
+            <!-- Date & Recipient -->
+            <div class="flex flex-col sm:flex-row sm:justify-between gap-4 border-b border-slate-200 pb-5">
+              <div class="space-y-0.5">
+                <div class="font-bold text-slate-900">${escapeHtml(cl.hiringManager || L.hiringManagerFallback)}</div>
+                ${cl.company ? `<div class="font-semibold text-slate-700">${escapeHtml(cl.company)}</div>` : ''}
+                ${cl.targetRole ? `<div class="text-xs text-sky-700 font-semibold">${escapeHtml(cl.targetRole)}</div>` : ''}
+              </div>
+              <div class="text-xs font-semibold text-slate-500">
+                ${escapeHtml(cl.date || new Date().toLocaleDateString(state.docLang === 'en' ? 'en-GB' : 'ar-EG', { day: 'numeric', month: 'long', year: 'numeric' }))}
+              </div>
+            </div>
+
+            <!-- Salutation -->
+            <div class="font-bold text-slate-900">
+              ${L.dear} ${escapeHtml(cl.hiringManager || L.hiringManagerFallback)},
+            </div>
+
+            <!-- 3-4 Structured Paragraphs -->
+            <div class="space-y-4 text-justify">
+              <p>${escapeHtml(cl.intro || defaultIntro)}</p>
+              ${cl.body ? `<p>${escapeHtml(cl.body)}</p>` : ''}
+              ${cl.closing ? `<p>${escapeHtml(cl.closing)}</p>` : ''}
+            </div>
+
+            <!-- Sign-off -->
+            <div class="mt-6 pt-4">
+              <p class="text-slate-600 mb-3">${L.sincerely}</p>
+              <p class="text-base font-extrabold text-slate-900">${escapeHtml(p.fullName || '')}</p>
+              ${p.title ? `<p class="text-xs text-slate-500">${escapeHtml(p.title)}</p>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Boot Application
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
